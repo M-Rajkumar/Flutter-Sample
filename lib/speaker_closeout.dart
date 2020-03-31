@@ -844,6 +844,25 @@ class _EOCloseOutPageState extends State<EOCloseOutPage> {
     });
   }
 
+  getAnswerList(String userId, String questionId, String optionId) {
+    bool isItemSelect = false;
+    if (liveAnswerMap != null) {
+      Map<String, LiveAnswer> getAnswerMapUserId = liveAnswerMap[userId];
+
+      if (getAnswerMapUserId != null) {
+        LiveAnswer liveAnswer = getAnswerMapUserId[questionId];
+        if (liveAnswer != null) {
+          if (liveAnswer.answerList != null &&
+              liveAnswer.answerList.contains(optionId)) {
+            isItemSelect = true;
+          }
+        }
+      }
+    }
+
+    return isItemSelect;
+  }
+
   Widget getQuestionType(
     int indexHeader,
     LiveQuestion questionAnswer,
@@ -938,10 +957,15 @@ class _EOCloseOutPageState extends State<EOCloseOutPage> {
                       }
                     });
                   },
-                  value: selectedList.contains(questionOption.id.toString()) ||
-                          selectedList
-                              .contains(questionOption.optionText.toString()) ??
-                      false,
+//                  value: selectedList.contains(questionOption.id.toString()) ||
+//                          selectedList
+//                              .contains(questionOption.optionText.toString()) ??
+//                      false,
+
+                  value: getAnswerList(
+                      userList.id.toString(),
+                      questionAnswer.id.toString(),
+                      questionOption.id.toString() ?? false),
                   controlAffinity: ListTileControlAffinity.leading,
                 );
               }
